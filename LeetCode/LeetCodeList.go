@@ -105,6 +105,7 @@ func (o *ListCode) AddTwoNumbers2(l1 *ListNode, l2 *ListNode) *ListNode {
 	return ret
 }
 
+//Q21 合并两个有序链表
 //这是自己的思路
 func (o *ListCode) MergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	//不要忽略边界问题
@@ -136,18 +137,32 @@ func (o *ListCode) MergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 //这是网上看到的递归思路
 func (o *ListCode) MergeTwoLists2(l1 *ListNode, l2 *ListNode) *ListNode {
 	if l1 == nil {
+		listCode.PrintList(l2)
 		return l2
 	}
 	if l2 ==  nil {
+		listCode.PrintList(l1)
 		return l1
 	}
 	if l1.Val < l2.Val {
 		l1.Next = listCode.MergeTwoLists2(l1.Next, l2)
+		listCode.PrintList(l1)
 		return l1
 	} else {
 		l2.Next = listCode.MergeTwoLists2(l1, l2.Next)
+		listCode.PrintList(l2)
 		return l2
 	}
+}
+
+//Q23 合并K个排序链表
+//借助 Q21 两两合并
+func (o *ListCode) MergeKLists(lists []*ListNode) *ListNode {
+	var ret *ListNode
+	for _, item := range lists {
+		ret = listCode.MergeTwoLists2(ret, item)
+	}
+	return ret
 }
 
 //Q83 删除排序链表中的重复元素(兼容链表是无序的）
@@ -219,6 +234,54 @@ func (o *ListCode) DeleteDuplicates3(head *ListNode) *ListNode {
 	}
 	if sign {
 		pre.Next = head.Next
+	}
+	return ret.Next
+}
+
+//Q19  删除链表的倒数第N个节点
+func (o *ListCode) RemoveNthFromEnd(head *ListNode, n int) *ListNode {
+	ret := new(ListNode)
+	ret.Next = head
+	pre := ret
+	for {
+		if head == nil {
+			break
+		}
+		if n == 0 {
+			pre = pre.Next
+		} else {
+			n --
+		}
+		head = head.Next
+	}
+	pre.Next = pre.Next.Next
+	return ret.Next
+}
+
+//Q24 两两交换链表中的节点
+func (o *ListCode) SwapPairs(head *ListNode) *ListNode {
+	ret := new(ListNode)
+	ret.Next = head
+	pre := ret
+	next := new(ListNode)
+	for  {
+		if head == nil {
+			break
+		}
+		next = head.Next
+		if next == nil {	//已到达最后一个单节点
+			break
+		}
+		//交换两个节点
+		pre.Next = next
+		head.Next = next.Next
+		next.Next = head
+		if next.Next == nil {
+			break
+		}
+		//向后移动两个节点
+		pre = pre.Next.Next
+		head = pre.Next
 	}
 	return ret.Next
 }
