@@ -285,3 +285,37 @@ func (o *ListCode) SwapPairs(head *ListNode) *ListNode {
 	}
 	return ret.Next
 }
+
+//Q206 反转链表
+//pre, head, next 一个一个反转
+func (o *ListCode) ReverseList(head *ListNode) *ListNode {
+	if head == nil {
+		return head
+	}
+	pre := head
+	head = head.Next
+	pre.Next = nil
+	next := new(ListNode)
+	for {
+		if head == nil {
+			break
+		}
+		next = head.Next
+		head.Next = pre
+		pre = head
+		head = next
+	}
+	return pre
+}
+
+//Q206
+//递归做法
+func (o *ListCode) ReverseList2(head *ListNode) *ListNode {
+	if head == nil || head.Next == nil {
+		return head
+	}
+	p := listCode.ReverseList2(head.Next)
+	head.Next.Next = head
+	head.Next = nil
+	return p
+}
